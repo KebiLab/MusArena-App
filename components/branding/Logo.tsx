@@ -56,7 +56,7 @@ export function LogoPlain({
       width={size}
       height={size}
       className={cn(
-        "rounded-md object-contain",
+        "rounded-2xl object-contain",
         invert ? "invert" : "",
         className,
       )}

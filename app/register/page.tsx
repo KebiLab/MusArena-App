@@ -8,10 +8,12 @@ export default async function RegisterPage() {
   if (user) redirect("/home");
 
   return (
-    <div className="min-h-screen bg-bg text-fg">
+    <div className="fixed inset-0 flex flex-col overflow-hidden bg-bg text-fg">
       <SignInHero />
-      <div className="px-6 pt-6">
-        <RegisterForm />
+      <div className="flex-1 overflow-y-auto px-6 pt-4 pb-6">
+        <div className="mx-auto w-full max-w-sm">
+          <RegisterForm />
+        </div>
       </div>
     </div>
   );

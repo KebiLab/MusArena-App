@@ -17,7 +17,7 @@ export function RegisterForm() {
   }, [state, router]);
 
   return (
-    <form action={formAction} className="flex flex-col gap-4">
+    <form action={formAction} className="flex flex-col gap-5">
       <h1 className="text-2xl font-bold">Создать аккаунт</h1>
       <Input
         name="username"
@@ -25,6 +25,7 @@ export function RegisterForm() {
         label="Никнейм"
         placeholder="musiclover"
         autoComplete="username"
+        className="rounded-2xl"
       />
       <Input
         name="email"
@@ -32,6 +33,7 @@ export function RegisterForm() {
         label="Email"
         placeholder="you@example.com"
         autoComplete="email"
+        className="rounded-2xl"
         required
       />
       <Input
@@ -40,11 +42,12 @@ export function RegisterForm() {
         label="Пароль"
         placeholder="минимум 6 символов"
         autoComplete="new-password"
+        className="rounded-2xl"
         required
       />
       {state?.error && <p className="text-sm text-red-500">{state.error}</p>}
-      <div className="mt-2 flex flex-col gap-3">
-        <Button type="submit" size="lg" fullWidth disabled={pending}>
+      <div className="mt-2 flex flex-col gap-4">
+        <Button type="submit" size="lg" fullWidth className="rounded-2xl" disabled={pending}>
           {pending ? "Регистрация..." : "Register"}
         </Button>
         <p className="text-center text-sm text-muted">

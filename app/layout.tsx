@@ -50,7 +50,7 @@ export default function RootLayout({
       <head>
         <ThemeScript />
       </head>
-      <body className="min-h-full flex flex-col bg-bg text-fg">
+      <body className="min-h-full flex flex-col bg-bg text-fg" suppressHydrationWarning>
         <AppShell>{children}</AppShell>
         <footer className="text-center text-xs text-muted py-4">
           made by KebiLab

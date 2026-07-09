@@ -17,7 +17,7 @@ export function SignInForm() {
   }, [state, router]);
 
   return (
-    <form action={formAction} className="flex flex-col gap-4">
+    <form action={formAction} className="flex flex-col gap-5">
       <h1 className="text-2xl font-bold">С возвращением</h1>
       <Input
         name="email"
@@ -25,6 +25,7 @@ export function SignInForm() {
         label="Email"
         placeholder="you@example.com"
         autoComplete="email"
+        className="rounded-2xl"
         required
       />
       <Input
@@ -33,11 +34,12 @@ export function SignInForm() {
         label="Пароль"
         placeholder="••••••••"
         autoComplete="current-password"
+        className="rounded-2xl"
         required
       />
       {state?.error && <p className="text-sm text-red-500">{state.error}</p>}
-      <div className="mt-2 flex flex-col gap-3">
-        <Button type="submit" size="lg" fullWidth disabled={pending}>
+      <div className="mt-2 flex flex-col gap-4">
+        <Button type="submit" size="lg" fullWidth className="rounded-2xl" disabled={pending}>
           {pending ? "Входим..." : "Sign in"}
         </Button>
         <p className="text-center text-sm text-muted">

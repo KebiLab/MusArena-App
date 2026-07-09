@@ -15,13 +15,13 @@ export function ChooseModeScreen() {
   useEffect(() => setMounted(true), []);
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-bg">
-      <div className="relative z-10 flex min-h-screen flex-col">
+    <div className="fixed inset-0 flex flex-col overflow-hidden bg-bg">
+      <div className="relative z-10 flex h-full flex-col">
         <header className="flex items-center justify-center pt-14">
           {mounted ? (
-            <LogoPlain size={56} invert={theme === "dark"} />
+            <LogoPlain size={56} invert={theme === "dark"} className="rounded-2xl" />
           ) : (
-            <div className="h-14 w-14 rounded-md bg-hover" />
+            <div className="h-14 w-14 rounded-2xl bg-hover" />
           )}
           <span className="ml-3 text-3xl font-extrabold tracking-tight">MusArena</span>
         </header>
@@ -52,7 +52,7 @@ export function ChooseModeScreen() {
           <Button
             size="xl"
             fullWidth
-            className="mt-8"
+            className="mt-8 rounded-2xl"
             onClick={() => router.push("/sign-in")}
           >
             Continue

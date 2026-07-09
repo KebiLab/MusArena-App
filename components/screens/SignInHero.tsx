@@ -10,7 +10,7 @@ export function SignInHero() {
   useEffect(() => setMounted(true), []);
 
   return (
-    <div className="relative h-72 w-full overflow-hidden">
+    <div className="relative h-56 w-full shrink-0 overflow-hidden">
       <Image
         src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1200&auto=format&fit=crop&q=70"
         alt=""
@@ -20,7 +20,7 @@ export function SignInHero() {
         className="object-cover opacity-70"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent to-bg" />
-      <div className="absolute inset-x-0 top-12 flex items-center justify-center">
+      <div className="absolute inset-x-0 top-10 flex items-center justify-center">
         <div className="flex items-center gap-3">
           {mounted && (
             <Image
@@ -28,7 +28,7 @@ export function SignInHero() {
               alt="MusArena"
               width={56}
               height={56}
-              className={`rounded-md object-contain ${theme === "dark" ? "invert" : ""}`}
+              className={`rounded-2xl object-contain ${theme === "dark" ? "invert" : ""}`}
               priority
             />
           )}

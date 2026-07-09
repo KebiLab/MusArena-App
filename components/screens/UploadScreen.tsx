@@ -63,8 +63,11 @@ export function UploadScreen() {
       let publicUrl: string;
       if (hasSupabase) {
         const supabase = await createClient();
+        const { data: userData } = await supabase.auth.getUser();
+        const user = userData.user;
+        if (!user) throw new Error("Необходимо войти, чтобы загружать треки");
         const ext = file.name.split(".").pop();
-        const path = `tracks/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+        const path = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
         const { error: upErr } = await supabase.storage
           .from("tracks")
           .upload(path, file, { upsert: false });
@@ -78,6 +81,7 @@ export function UploadScreen() {
           audio_url: publicUrl,
           duration,
           cover_url: null,
+          uploaded_by: user.id,
         });
         if (dbErr) throw new Error(dbErr.message);
       } else {

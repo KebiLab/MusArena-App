@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MusArena
 
-## Getting Started
+Spotify-аналог. Mobile-first web app на Next.js. Сделано KebiLab.
 
-First, run the development server:
+## Stack
+- Next.js 16 (App Router) + TypeScript
+- Tailwind CSS v4 (ЧБ-палитра, light/dark темы)
+- Supabase (Auth + Postgres + Storage) — для загрузки треков
+- Zustand (плеер), Framer Motion (анимации), lucide-react (иконки)
+
+## Setup
 
 ```bash
+npm install
+cp .env.example .env.local
+# заполни NEXT_PUBLIC_SUPABASE_URL и NEXT_PUBLIC_SUPABASE_ANON_KEY
+# в Supabase SQL Editor выполни supabase/schema.sql
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Deploy
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+vercel --prod
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Деплой на Vercel: [musarena.vercel.app](https://musarena.vercel.app)
 
-## Learn More
+## Features
+- Loading → Get Started → Choose Mode (Dark/Light) → Auth
+- Главная: вкладки News/Video/Artists/Podcasts, hero-карточка, плейлист
+- Плеер: мини + полноэкранный с обложкой, прогрессом, контролами
+- Lyrics поверх блюра обложки
+- Страница артиста с альбомами и треками
+- Library: твои плейлисты и загруженные треки
+- Upload: drag-and-drop, аудио уезжает в Supabase Storage
+- Light/Dark тема (ЧБ-палитра, переключатель)
+- Footer: "made by KebiLab"
 
-To learn more about Next.js, take a look at the following resources:
+## Branding
+Логотип: `public/logo.jpg` (мусарналого.jpg, инвертируется на тёмной теме)
+Везде: "MusArena" вместо "Spotify", "made by KebiLab" в футере.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+made by KebiLab

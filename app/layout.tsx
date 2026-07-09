@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeScript } from "@/components/theme/ThemeScript";
 import { AppShell } from "@/components/layout/AppShell";
+import { RegisterSW } from "@/components/pwa/RegisterSW";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -17,16 +18,22 @@ export const metadata: Metadata = {
   applicationName: "MusArena",
   authors: [{ name: "KebiLab" }],
   keywords: ["MusArena", "music", "streaming", "KebiLab"],
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "MusArena",
+  },
   icons: {
-    icon: "/logo.jpg",
-    shortcut: "/logo.jpg",
-    apple: "/logo.jpg",
+    icon: [{ url: "/favicon.png", type: "image/png" }],
+    shortcut: "/favicon.png",
+    apple: "/apple-touch-icon.png",
   },
   openGraph: {
     title: "MusArena — made by KebiLab",
     description: "Твой Spotify-аналог. made by KebiLab.",
     type: "website",
-    images: ["/logo.jpg"],
+    images: ["/icon-512.png"],
   },
 };
 
@@ -49,9 +56,14 @@ export default function RootLayout({
     <html lang="ru" className={`${inter.variable}`} suppressHydrationWarning>
       <head>
         <ThemeScript />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
-      <body className="min-h-full flex flex-col bg-bg text-fg" suppressHydrationWarning>
+      <body
+        className="min-h-full flex flex-col bg-bg text-fg"
+        suppressHydrationWarning
+      >
         <AppShell>{children}</AppShell>
+        <RegisterSW />
         <footer className="text-center text-xs text-muted py-4">
           made by KebiLab
         </footer>

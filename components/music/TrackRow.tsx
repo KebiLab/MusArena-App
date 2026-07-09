@@ -1,9 +1,10 @@
 "use client";
 
-import { Play, Heart, MoreHorizontal, User } from "lucide-react";
+import { Play, MoreHorizontal, User } from "lucide-react";
 import { usePlayer } from "@/store/playerStore";
 import { formatTime } from "@/lib/utils";
 import type { AnyTrack } from "@/lib/api/deezer";
+import { LikeButton } from "./LikeButton";
 
 export function TrackRow({
   track,
@@ -80,12 +81,7 @@ export function TrackRow({
         <p className="truncate text-xs text-muted">{track.artist}</p>
       </div>
       <span className="text-xs text-muted tabular-nums">{formatTime(track.duration)}</span>
-      <button
-        className="grid h-8 w-8 place-items-center rounded-full text-muted hover:text-fg"
-        aria-label="Like"
-      >
-        <Heart size={16} />
-      </button>
+      <LikeButton trackId={track.id} size={16} />
       <button
         className="grid h-8 w-8 place-items-center rounded-full text-muted hover:text-fg"
         aria-label="More"

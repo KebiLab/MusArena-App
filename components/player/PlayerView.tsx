@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { parseLrc, findActiveLine } from "@/lib/lyrics";
+import { LikeButton } from "@/components/music/LikeButton";
+import { CrossfadeControl } from "./CrossfadeControl";
 
 export function PlayerView() {
   const {
@@ -147,12 +149,7 @@ export function PlayerView() {
                   <h2 className="text-2xl font-bold truncate">{current.title}</h2>
                   <p className="text-base text-muted truncate">{current.artist}</p>
                 </div>
-                <button
-                  className="grid h-10 w-10 place-items-center rounded-full hover:bg-hover"
-                  aria-label="Like"
-                >
-                  <Heart size={22} />
-                </button>
+                <LikeButton trackId={current.id} size={22} />
               </div>
 
               <div className="flex items-center gap-2">
@@ -232,6 +229,10 @@ export function PlayerView() {
                   onChange={(e) => setVolume(parseFloat(e.target.value))}
                   className="flex-1 accent-fg"
                 />
+              </div>
+
+              <div className="mt-4 border-t border-line pt-4">
+                <CrossfadeControl />
               </div>
             </div>
           </motion.div>

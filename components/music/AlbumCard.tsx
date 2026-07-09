@@ -2,7 +2,7 @@
 
 import { Play } from "lucide-react";
 import { usePlayer } from "@/store/playerStore";
-import type { TrackWithRelations } from "@/lib/types";
+import type { AnyTrack } from "@/lib/api/deezer";
 
 export function AlbumCard({
   track,
@@ -10,8 +10,8 @@ export function AlbumCard({
   index,
   size = "md",
 }: {
-  track: TrackWithRelations;
-  tracks: TrackWithRelations[];
+  track: AnyTrack;
+  tracks: AnyTrack[];
   index: number;
   size?: "sm" | "md" | "lg";
 }) {
@@ -25,12 +25,12 @@ export function AlbumCard({
           tracks.map((t) => ({
             id: t.id,
             title: t.title,
-            artist: t.artist.name,
-            album: t.album?.title ?? null,
-            cover_url: t.cover_url,
+            artist: t.artist,
+            album: t.album ?? null,
+            cover_url: t.cover_url ?? null,
             audio_url: t.audio_url,
             duration: t.duration,
-            lyrics_lrc: t.lyrics_lrc,
+            lyrics_lrc: t.lyrics_lrc ?? null,
           })),
           index,
         )
@@ -39,9 +39,11 @@ export function AlbumCard({
     >
       <div className={`relative w-full ${dims} overflow-hidden rounded-2xl bg-card`}>
         {track.cover_url ? (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={track.cover_url}
             alt={track.title}
+            loading="lazy"
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
@@ -54,8 +56,8 @@ export function AlbumCard({
         </div>
       </div>
       <div>
-        <p className="truncate text-sm font-semibold">{track.album?.title ?? track.title}</p>
-        <p className="truncate text-xs text-muted">{track.artist.name}</p>
+        <p className="truncate text-sm font-semibold">{track.album ?? track.title}</p>
+        <p className="truncate text-xs text-muted">{track.artist}</p>
       </div>
     </button>
   );

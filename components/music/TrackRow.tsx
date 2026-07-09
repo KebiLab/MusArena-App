@@ -1,20 +1,22 @@
 "use client";
 
-import { Play, Heart, MoreHorizontal } from "lucide-react";
+import { Play, Heart, MoreHorizontal, User } from "lucide-react";
 import { usePlayer } from "@/store/playerStore";
-import type { TrackWithRelations } from "@/lib/types";
 import { formatTime } from "@/lib/utils";
+import type { AnyTrack } from "@/lib/api/deezer";
 
 export function TrackRow({
   track,
   tracks,
   index,
   showCover = true,
+  isOwn = false,
 }: {
-  track: TrackWithRelations;
-  tracks: TrackWithRelations[];
+  track: AnyTrack;
+  tracks: AnyTrack[];
   index: number;
   showCover?: boolean;
+  isOwn?: boolean;
 }) {
   const setQueue = usePlayer((s) => s.setQueue);
 
@@ -23,25 +25,26 @@ export function TrackRow({
       tracks.map((t) => ({
         id: t.id,
         title: t.title,
-        artist: t.artist.name,
-        album: t.album?.title ?? null,
-        cover_url: t.cover_url,
+        artist: t.artist,
+        album: t.album ?? null,
+        cover_url: t.cover_url ?? null,
         audio_url: t.audio_url,
         duration: t.duration,
-        lyrics_lrc: t.lyrics_lrc,
+        lyrics_lrc: t.lyrics_lrc ?? null,
       })),
       index,
     );
   };
 
   return (
-    <div className="group flex items-center gap-3 rounded-lg p-2 hover:bg-hover transition-colors">
+    <div className="group flex items-center gap-3 rounded-xl p-2 hover:bg-hover transition-colors">
       {showCover && (
         <div
-          className="relative h-12 w-12 shrink-0 overflow-hidden rounded bg-card cursor-pointer"
+          className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-card cursor-pointer"
           onClick={onPlay}
         >
           {track.cover_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={track.cover_url}
               alt={track.title}
@@ -65,8 +68,16 @@ export function TrackRow({
         </button>
       )}
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-semibold">{track.title}</p>
-        <p className="truncate text-xs text-muted">{track.artist.name}</p>
+        <div className="flex items-center gap-2">
+          <p className="truncate text-sm font-semibold">{track.title}</p>
+          {isOwn && (
+            <span className="shrink-0 inline-flex items-center gap-1 rounded-full bg-fg/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider">
+              <User size={9} />
+              Твой
+            </span>
+          )}
+        </div>
+        <p className="truncate text-xs text-muted">{track.artist}</p>
       </div>
       <span className="text-xs text-muted tabular-nums">{formatTime(track.duration)}</span>
       <button

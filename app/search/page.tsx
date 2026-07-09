@@ -1,7 +1,5 @@
-import { fetchArtists } from "@/lib/data";
-import { SearchScreen } from "@/components/screens/SearchScreen";
+import { SearchClient } from "@/components/screens/SearchClient";
 
-export default async function SearchPage() {
-  const artists = await fetchArtists();
-  return <SearchScreen artists={artists} />;
+export default function SearchPage() {
+  return <SearchClient />;
 }

@@ -3,9 +3,15 @@
 import { TrackRow } from "@/components/music/TrackRow";
 import { Upload, Heart } from "lucide-react";
 import Link from "next/link";
-import type { TrackWithRelations } from "@/lib/types";
+import type { AnyTrack } from "@/lib/api/deezer";
 
-export function LibraryScreen({ tracks }: { tracks: TrackWithRelations[] }) {
+export function LibraryScreen({
+  tracks,
+  userId,
+}: {
+  tracks: AnyTrack[];
+  userId: string;
+}) {
   return (
     <div className="mx-auto max-w-md px-4 pt-4">
       <header className="flex items-center justify-between">
@@ -25,9 +31,9 @@ export function LibraryScreen({ tracks }: { tracks: TrackWithRelations[] }) {
         </h2>
         <Link
           href="/library/liked"
-          className="flex items-center gap-3 rounded-xl bg-card p-3 hover:bg-hover"
+          className="flex items-center gap-3 rounded-2xl bg-card p-3 hover:bg-hover"
         >
-          <div className="grid h-14 w-14 place-items-center rounded-md bg-fg text-bg">
+          <div className="grid h-14 w-14 place-items-center rounded-lg bg-fg text-bg">
             <Heart size={22} fill="currentColor" />
           </div>
           <div className="min-w-0">
@@ -39,13 +45,29 @@ export function LibraryScreen({ tracks }: { tracks: TrackWithRelations[] }) {
 
       <section className="mt-6 mb-8">
         <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">
-          All tracks
+          Твои аплоады
         </h2>
-        <div className="space-y-1">
-          {tracks.map((t, i) => (
-            <TrackRow key={t.id} track={t} tracks={tracks} index={i} />
-          ))}
-        </div>
+        {tracks.length === 0 ? (
+          <p className="text-sm text-muted">
+            Пока ничего нет. Загрузи свой первый трек на странице{" "}
+            <Link href="/upload" className="underline">
+              Upload
+            </Link>
+            .
+          </p>
+        ) : (
+          <div className="space-y-1">
+            {tracks.map((t, i) => (
+              <TrackRow
+                key={t.id}
+                track={t}
+                tracks={tracks}
+                index={i}
+                isOwn
+              />
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );

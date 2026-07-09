@@ -2,28 +2,41 @@
 
 import { ChevronLeft, MoreVertical, Play } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { usePlayer } from "@/store/playerStore";
 import { TrackRow } from "@/components/music/TrackRow";
-import { AlbumCard } from "@/components/music/AlbumCard";
-import type { Artist, Album, TrackWithRelations } from "@/lib/types";
+import type { AnyTrack, AnyArtist, AnyAlbum } from "@/lib/api/deezer";
 
 export function ArtistScreen({
   artist,
   tracks,
   albums,
 }: {
-  artist: Artist;
-  tracks: TrackWithRelations[];
-  albums: Album[];
+  artist: AnyArtist;
+  tracks: AnyTrack[];
+  albums: AnyAlbum[];
 }) {
   const router = useRouter();
   const setQueue = usePlayer((s) => s.setQueue);
+
+  const firstAlbumTrack = (albumId: string): AnyTrack | undefined => {
+    const al = albums.find((a) => a.id === albumId);
+    if (!al) return tracks[0];
+    return (
+      tracks.find((t) => t.album_id === albumId) ??
+      {
+        ...(tracks[0] as AnyTrack),
+        album: al.title,
+        album_id: al.id,
+        cover_url: al.cover_url,
+      }
+    );
+  };
 
   return (
     <div className="mx-auto max-w-md">
       <div className="relative h-80 w-full overflow-hidden">
         {artist.image_url ? (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={artist.image_url}
             alt={artist.name}
@@ -37,10 +50,14 @@ export function ArtistScreen({
           <button
             onClick={() => router.back()}
             className="grid h-10 w-10 place-items-center rounded-full bg-black/40 text-white hover:bg-black/60"
+            aria-label="Back"
           >
             <ChevronLeft size={22} />
           </button>
-          <button className="grid h-10 w-10 place-items-center rounded-full bg-black/40 text-white hover:bg-black/60">
+          <button
+            className="grid h-10 w-10 place-items-center rounded-full bg-black/40 text-white hover:bg-black/60"
+            aria-label="More"
+          >
             <MoreVertical size={20} />
           </button>
         </div>
@@ -48,12 +65,12 @@ export function ArtistScreen({
           <h1 className="text-3xl font-extrabold drop-shadow">{artist.name}</h1>
           <p className="mt-1 text-sm opacity-80">
             {albums.length} Album · {tracks.length} Track
+            {artist.nb_fan != null && ` · ${artist.nb_fan.toLocaleString()} фанатов`}
           </p>
         </div>
       </div>
 
       <div className="-mt-6 px-5">
-        <p className="text-sm text-muted">{artist.bio ?? "Артист MusArena."}</p>
         <button
           onClick={() =>
             tracks.length > 0 &&
@@ -61,17 +78,18 @@ export function ArtistScreen({
               tracks.map((t) => ({
                 id: t.id,
                 title: t.title,
-                artist: t.artist.name,
-                album: t.album?.title ?? null,
-                cover_url: t.cover_url,
+                artist: t.artist,
+                album: t.album ?? null,
+                cover_url: t.cover_url ?? null,
                 audio_url: t.audio_url,
                 duration: t.duration,
-                lyrics_lrc: t.lyrics_lrc,
+                lyrics_lrc: t.lyrics_lrc ?? null,
               })),
               0,
             )
           }
           className="mt-4 grid h-14 w-14 place-items-center rounded-full bg-fg text-bg"
+          aria-label="Play"
         >
           <Play size={26} fill="currentColor" className="translate-x-0.5" />
         </button>
@@ -80,16 +98,15 @@ export function ArtistScreen({
       <section className="mt-6 px-4">
         <h2 className="mb-3 text-xl font-bold">Albums</h2>
         <div className="flex gap-3 overflow-x-auto no-scrollbar -mx-4 px-4">
-          {albums.map((al, i) => {
-            const firstTrack = tracks.find((t) => t.album_id === al.id) ?? tracks[0];
-            if (!firstTrack) return null;
+          {albums.slice(0, 12).map((al) => {
+            const t = firstAlbumTrack(al.id);
+            if (!t) return null;
             return (
-              <AlbumCard
-                key={al.id}
-                track={{ ...firstTrack, album: al }}
-                tracks={tracks}
-                index={tracks.findIndex((t) => t.id === firstTrack.id)}
-              />
+              <div key={al.id} className="w-36 shrink-0">
+                <ArtistAlbumTile track={t} tracks={tracks} />
+                <p className="mt-2 truncate text-sm font-semibold">{al.title}</p>
+                <p className="truncate text-xs text-muted">{al.year ?? ""}</p>
+              </div>
             );
           })}
         </div>
@@ -97,8 +114,7 @@ export function ArtistScreen({
 
       <section className="mt-6 mb-8 px-4">
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-xl font-bold">Songs</h2>
-          <button className="text-sm text-muted">See More</button>
+          <h2 className="text-xl font-bold">Top Tracks</h2>
         </div>
         <div className="space-y-1">
           {tracks.map((t, i) => (
@@ -107,5 +123,48 @@ export function ArtistScreen({
         </div>
       </section>
     </div>
+  );
+}
+
+function ArtistAlbumTile({
+  track,
+  tracks,
+}: {
+  track: AnyTrack;
+  tracks: AnyTrack[];
+}) {
+  const setQueue = usePlayer((s) => s.setQueue);
+  return (
+    <button
+      onClick={() =>
+        setQueue(
+          tracks.map((t) => ({
+            id: t.id,
+            title: t.title,
+            artist: t.artist,
+            album: t.album ?? null,
+            cover_url: t.cover_url ?? null,
+            audio_url: t.audio_url,
+            duration: t.duration,
+            lyrics_lrc: t.lyrics_lrc ?? null,
+          })),
+          0,
+        )
+      }
+      className="group block w-full"
+    >
+      <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-card">
+        {track.cover_url ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={track.cover_url}
+            alt={track.title}
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <div className="h-full w-full bg-card" />
+        )}
+      </div>
+    </button>
   );
 }

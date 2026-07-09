@@ -10,6 +10,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://musarena.vercel.app"),
   title: "MusArena — made by KebiLab",
   description:
     "MusArena — твой Spotify-аналог. Слушай музыку, загружай свои треки. made by KebiLab.",
